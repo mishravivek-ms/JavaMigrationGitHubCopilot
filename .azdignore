@@ -1,0 +1,46 @@
+# Ignore files that should not be uploaded to Azure during deployment
+
+# Build artifacts
+target/
+*.jar.original
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.github/
+
+# Azure
+.azure/
+
+# Documentation
+Migration/
+README.md
+MIGRATION_SUMMARY.md
+BUILD_AND_RUN.md
+AZURE_DEPLOYMENT.md
+AZURE_DEVELOPER_CLI.md
+
+# Logs
+logs/
+*.log
+
+# Maven
+.mvn/
+
+# Docker
+Dockerfile
+.dockerignore
+
+# Test files
+src/test/

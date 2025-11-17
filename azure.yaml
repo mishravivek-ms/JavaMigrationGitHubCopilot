@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: message-service
+metadata:
+  template: message-service@0.0.1-beta
+
+services:
+  api:
+    project: .
+    language: java
+    host: appservice
+    hooks:
+      prebuild:
+        posix:
+          shell: sh
+          run: echo "Preparing Maven build..."
+          interactive: false
+          continueOnError: false
+      postbuild:
+        posix:
+          shell: sh
+          run: echo "Build completed. Artifact at target/message-service.jar"
+          interactive: false
+          continueOnError: false
