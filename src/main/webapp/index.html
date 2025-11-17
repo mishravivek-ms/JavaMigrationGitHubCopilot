@@ -1,142 +1,452 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Message Service - Legacy Application</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Service - Modern Spring Boot Application</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 50px auto;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            background-color: #f5f5f5;
+            line-height: 1.6;
         }
+        
         .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: fadeIn 0.6s ease-in;
         }
-        h1 {
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .success-banner {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(17, 153, 142, 0.3);
+        }
+        
+        .success-banner h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .tech-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .tech-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tech-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        
+        .tech-card ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .tech-card li {
+            padding: 5px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .tech-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #38ef7d;
+            font-weight: bold;
+        }
+        
+        h2 {
             color: #333;
-            border-bottom: 3px solid #007bff;
+            margin: 30px 0 20px 0;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
             padding-bottom: 10px;
+            display: inline-block;
         }
-        .info {
-            background-color: #e7f3ff;
-            border-left: 4px solid #007bff;
-            padding: 15px;
-            margin: 20px 0;
+        
+        .section {
+            margin: 30px 0;
         }
-        .warning {
-            background-color: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 15px;
-            margin: 20px 0;
+        
+        .endpoints-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 20px;
         }
+        
         .endpoint {
-            background-color: #f8f9fa;
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 4px;
-            font-family: monospace;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 18px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: start;
+            gap: 15px;
         }
+        
+        .endpoint:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            transform: translateX(5px);
+        }
+        
         .method {
             display: inline-block;
-            padding: 2px 8px;
-            border-radius: 3px;
-            font-weight: bold;
-            margin-right: 10px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+            min-width: 70px;
+            text-align: center;
+            flex-shrink: 0;
         }
-        .get { background-color: #28a745; color: white; }
-        .post { background-color: #007bff; color: white; }
-        .put { background-color: #ffc107; color: black; }
-        .delete { background-color: #dc3545; color: white; }
+        
+        .get { 
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+        }
+        
+        .post { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .put { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .delete { 
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+        
+        .endpoint-details {
+            flex: 1;
+        }
+        
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .endpoint-desc {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .endpoint-body {
+            background: #f5f5f5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: #555;
+        }
+        
+        .info-card {
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .info-card h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .db-credentials {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .db-credentials div {
+            padding: 5px 0;
+        }
+        
+        .db-credentials strong {
+            color: #667eea;
+            display: inline-block;
+            min-width: 120px;
+        }
+        
+        .link-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        
+        .link-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .footer {
+            background: #f5f7fa;
+            padding: 30px 40px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .tech-stack {
+                grid-template-columns: 1fr;
+            }
+            
+            .endpoint {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🚀 Message Service - Legacy Application</h1>
+        <div class="header">
+            <h1>🚀 Message Service API</h1>
+            <p>Modern Spring Boot 3.3.x Application on JDK 17</p>
+        </div>
         
-        <div class="info">
-            <strong>Welcome!</strong> This is a legacy Spring Framework 4.x application running on JDK 1.8.
-            <br>It's designed for a migration workshop to demonstrate modernizing Java applications.
+        <div class="content">
+            <div class="success-banner">
+                <h2>✨ Successfully Migrated to Modern Stack!</h2>
+                <p>This application has been successfully migrated from legacy Spring Framework 4.x on JDK 1.8 to the latest Spring Boot 3.3.x running on JDK 17 with Jakarta EE.</p>
+            </div>
+
+            <h2>🔧 Modern Technology Stack</h2>
+            <div class="tech-stack">
+                <div class="tech-card">
+                    <h3>☕ Java Platform</h3>
+                    <ul>
+                        <li>JDK 17 (LTS)</li>
+                        <li>Modern Java features</li>
+                        <li>Records & Pattern Matching</li>
+                        <li>Enhanced performance</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>🍃 Spring Framework</h3>
+                    <ul>
+                        <li>Spring Boot 3.3.5</li>
+                        <li>Spring Data JPA</li>
+                        <li>Spring Web MVC</li>
+                        <li>Bean Validation</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>🗄️ Jakarta & Database</h3>
+                    <ul>
+                        <li>Jakarta EE 9+</li>
+                        <li>H2 In-Memory Database</li>
+                        <li>Hibernate ORM</li>
+                        <li>JPA 3.0+</li>
+                    </ul>
+                </div>
+                
+                <div class="tech-card">
+                    <h3>📦 Modern Dependencies</h3>
+                    <ul>
+                        <li>Apache Commons Lang3</li>
+                        <li>SLF4J Logging</li>
+                        <li>Embedded Tomcat</li>
+                        <li>Maven Build Tool</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📡 API Endpoints</h2>
+                <div class="endpoints-grid">
+                    <div class="endpoint">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-details">
+                            <div class="endpoint-path">/api/messages</div>
+                            <div class="endpoint-desc">Retrieve all messages from the database</div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-details">
+                            <div class="endpoint-path">/api/messages/{id}</div>
+                            <div class="endpoint-desc">Get a specific message by its ID</div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method post">POST</span>
+                        <div class="endpoint-details">
+                            <div class="endpoint-path">/api/messages</div>
+                            <div class="endpoint-desc">Create a new message</div>
+                            <div class="endpoint-body">{"content": "Your message text", "author": "Author name"}</div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method put">PUT</span>
+                        <div class="endpoint-details">
+                            <div class="endpoint-path">/api/messages/{id}</div>
+                            <div class="endpoint-desc">Update an existing message</div>
+                            <div class="endpoint-body">{"content": "Updated message text"}</div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method delete">DELETE</span>
+                        <div class="endpoint-details">
+                            <div class="endpoint-path">/api/messages/{id}</div>
+                            <div class="endpoint-desc">Delete a message by its ID</div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-details">
+                            <div class="endpoint-path">/api/messages/search?keyword=text</div>
+                            <div class="endpoint-desc">Search messages containing specific keywords</div>
+                        </div>
+                    </div>
+
+                    <div class="endpoint">
+                        <span class="method get">GET</span>
+                        <div class="endpoint-details">
+                            <div class="endpoint-path">/api/messages/author/{author}</div>
+                            <div class="endpoint-desc">Get all messages from a specific author</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="info-card">
+                    <h3>🗄️ H2 Database Console</h3>
+                    <p>Access the embedded H2 database console to view and query your data directly.</p>
+                    <div class="db-credentials">
+                        <div><strong>JDBC URL:</strong> jdbc:h2:mem:messagedb</div>
+                        <div><strong>Username:</strong> sa</div>
+                        <div><strong>Password:</strong> (empty)</div>
+                    </div>
+                    <a href="/h2-console" target="_blank" class="link-button">Open H2 Console →</a>
+                </div>
+
+                <div class="info-card">
+                    <h3>⏰ Scheduled Tasks</h3>
+                    <p>The application includes automated scheduled tasks that run periodically:</p>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>Message statistics are reported every minute</li>
+                        <li>Check the application console logs for detailed output</li>
+                        <li>Demonstrates Spring's @Scheduled annotation capabilities</li>
+                    </ul>
+                </div>
+
+                <div class="info-card">
+                    <h3>🎯 Migration Success</h3>
+                    <p>This application demonstrates a successful migration journey:</p>
+                    <ul style="margin-top: 15px; padding-left: 20px;">
+                        <li>✅ Migrated from JDK 1.8 to JDK 17</li>
+                        <li>✅ Upgraded from Spring 4.x to Spring Boot 3.3.x</li>
+                        <li>✅ Transitioned from javax.* to jakarta.* packages</li>
+                        <li>✅ Modernized logging and dependency management</li>
+                        <li>✅ Improved performance and security features</li>
+                    </ul>
+                </div>
+            </div>
         </div>
-
-        <div class="warning">
-            <strong>⚠️ Legacy Technology Stack:</strong>
-            <ul>
-                <li>JDK 1.8 (2014)</li>
-                <li>Spring Framework 4.3.x (pre-Spring Boot)</li>
-                <li>Hibernate 4.x</li>
-                <li>javax.* packages (pre-Jakarta EE)</li>
-                <li>Log4j 1.x</li>
-                <li>Deprecated Date/Calendar APIs</li>
-            </ul>
+        
+        <div class="footer">
+            <p><strong>Message Service API</strong> - Powered by Spring Boot 3.3.5 & JDK 17</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">Built with ❤️ for modern Java development</p>
         </div>
-
-        <h2>📡 Available API Endpoints</h2>
-
-        <div class="endpoint">
-            <span class="method get">GET</span>
-            <strong>/api/messages</strong> - Get all messages
-        </div>
-
-        <div class="endpoint">
-            <span class="method get">GET</span>
-            <strong>/api/messages/{id}</strong> - Get message by ID
-        </div>
-
-        <div class="endpoint">
-            <span class="method post">POST</span>
-            <strong>/api/messages</strong> - Create new message
-            <br><small>Body: {"content": "message text", "author": "author name"}</small>
-        </div>
-
-        <div class="endpoint">
-            <span class="method put">PUT</span>
-            <strong>/api/messages/{id}</strong> - Update message
-            <br><small>Body: {"content": "updated text"}</small>
-        </div>
-
-        <div class="endpoint">
-            <span class="method delete">DELETE</span>
-            <strong>/api/messages/{id}</strong> - Delete message
-        </div>
-
-        <div class="endpoint">
-            <span class="method get">GET</span>
-            <strong>/api/messages/search?keyword=text</strong> - Search messages
-        </div>
-
-        <div class="endpoint">
-            <span class="method get">GET</span>
-            <strong>/api/messages/author/{author}</strong> - Get messages by author
-        </div>
-
-        <h2>🗄️ Database Console</h2>
-        <div class="info">
-            <strong>H2 Console:</strong> <a href="/h2-console" target="_blank">/h2-console</a>
-            <br>
-            <small>
-                JDBC URL: jdbc:h2:mem:messagedb<br>
-                Username: sa<br>
-                Password: (empty)
-            </small>
-        </div>
-
-        <h2>⏰ Scheduled Task</h2>
-        <div class="info">
-            A scheduled task runs every minute to report message statistics.
-            <br>Check the console logs to see the output.
-        </div>
-
-        <h2>🎯 Migration Workshop</h2>
-        <p>
-            This application is ready for migration! Check the <code>/Migration</code> folder
-            for step-by-step instructions on using GitHub Copilot to modernize this application
-            to Spring Boot 3.x and JDK 17+.
-        </p>
     </div>
 </body>
 </html>
