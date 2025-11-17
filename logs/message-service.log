@@ -258,3 +258,37 @@ Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make protect
 2025-11-16 16:50:47 INFO  MessageScheduledTask:77 - Task Status Code: 200
 2025-11-16 16:50:47 INFO  MessageScheduledTask:79 - Task completed successfully
 2025-11-16 16:50:47 INFO  MessageScheduledTask:86 - ========================================
+2025-11-17 15:31:14 INFO  MessageScheduledTask:43 - ========================================
+2025-11-17 15:31:14 INFO  MessageScheduledTask:44 - Message Statistics Task - Executing
+2025-11-17 15:31:14 INFO  MessageScheduledTask:45 - ========================================
+2025-11-17 15:31:14 INFO  MessageScheduledTask:50 - Execution Time: 2025-11-17 15:31:14
+2025-11-17 15:31:14 INFO  MessageScheduledTask:56 - Total Messages: 5
+2025-11-17 15:31:14 INFO  MessageScheduledTask:57 - Active Messages: 5
+2025-11-17 15:31:14 INFO  MessageScheduledTask:58 - Inactive Messages: 0
+2025-11-17 15:31:14 INFO  MessageScheduledTask:66 - Messages from last 7 days: 5
+2025-11-17 15:31:14 INFO  MessageScheduledTask:73 - Next Execution: 2025-11-17 15:32:14
+2025-11-17 15:31:14 INFO  MessageScheduledTask:77 - Task Status Code: 200
+2025-11-17 15:31:14 INFO  MessageScheduledTask:79 - Task completed successfully
+2025-11-17 15:31:14 INFO  MessageScheduledTask:86 - ========================================
+2025-11-17 15:31:50 INFO  BookStoreController:53 - GET /bookstore - Fetching all books
+2025-11-17 15:32:01 INFO  BookStoreController:102 - POST /bookstore - Creating book: The Great Gatsby
+2025-11-17 15:32:11 INFO  BookStoreController:102 - POST /bookstore - Creating book: To Kill a Mockingbird
+2025-11-17 15:32:14 INFO  MessageScheduledTask:43 - ========================================
+2025-11-17 15:32:14 INFO  MessageScheduledTask:44 - Message Statistics Task - Executing
+2025-11-17 15:32:14 INFO  MessageScheduledTask:45 - ========================================
+2025-11-17 15:32:14 INFO  MessageScheduledTask:50 - Execution Time: 2025-11-17 15:32:14
+2025-11-17 15:32:14 INFO  MessageScheduledTask:56 - Total Messages: 5
+2025-11-17 15:32:14 INFO  MessageScheduledTask:57 - Active Messages: 5
+2025-11-17 15:32:14 INFO  MessageScheduledTask:58 - Inactive Messages: 0
+2025-11-17 15:32:14 INFO  MessageScheduledTask:66 - Messages from last 7 days: 5
+2025-11-17 15:32:14 INFO  MessageScheduledTask:73 - Next Execution: 2025-11-17 15:33:14
+2025-11-17 15:32:14 INFO  MessageScheduledTask:77 - Task Status Code: 200
+2025-11-17 15:32:14 INFO  MessageScheduledTask:79 - Task completed successfully
+2025-11-17 15:32:14 INFO  MessageScheduledTask:86 - ========================================
+2025-11-17 15:32:21 INFO  BookStoreController:53 - GET /bookstore - Fetching all books
+2025-11-17 15:32:21 INFO  BookStoreController:78 - GET /bookstore/1
+2025-11-17 15:32:32 INFO  BookStoreController:134 - PUT /bookstore/1
+2025-11-17 15:32:43 INFO  BookStoreController:205 - GET /bookstore/author/Harper Lee
+2025-11-17 15:32:43 INFO  BookStoreController:187 - GET /bookstore/search?keyword=gatsby
+2025-11-17 15:32:53 INFO  BookStoreController:163 - DELETE /bookstore/2
+2025-11-17 15:33:03 INFO  BookStoreController:53 - GET /bookstore - Fetching all books
