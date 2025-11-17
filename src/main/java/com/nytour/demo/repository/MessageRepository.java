@@ -6,16 +6,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Message Repository - Spring Data JPA 1.x (legacy)
+ * Message Repository - Spring Data JPA 3.x
  * 
- * MIGRATION CHALLENGES:
- * 1. Spring Data JPA 1.x to 3.x API changes
- * 2. Date parameters will change to LocalDateTime
- * 3. Query method naming conventions may have updates
+ * MIGRATION CHANGES:
+ * 1. Spring Data JPA 2.x to 3.x (no major API changes)
+ * 2. Date parameters changed to LocalDateTime
+ * 3. Query method naming conventions remain the same
  */
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
@@ -26,12 +26,12 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     // Find active messages (legacy boolean handling)
     List<Message> findByActiveTrue();
 
-    // Find by date range using deprecated Date API
-    List<Message> findByCreatedDateBetween(Date startDate, Date endDate);
+    // Find by date range using modern LocalDateTime
+    List<Message> findByCreatedDateBetween(LocalDateTime startDate, LocalDateTime endDate);
 
-    // Custom JPQL query with Date parameter
+    // Custom JPQL query with LocalDateTime parameter
     @Query("SELECT m FROM Message m WHERE m.createdDate > :date AND m.active = true")
-    List<Message> findRecentActiveMessages(@Param("date") Date date);
+    List<Message> findRecentActiveMessages(@Param("date") LocalDateTime date);
 
     // Count active messages
     Long countByActiveTrue();
