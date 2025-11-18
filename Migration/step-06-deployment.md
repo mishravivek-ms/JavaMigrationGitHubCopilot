@@ -20,7 +20,9 @@
 
 ## ⚡ Quick Start (Copy & Paste Commands)
 
-For demo participants who want to get started immediately:
+**For demo participants** who want to get started immediately with a modern Infrastructure as Code approach:
+
+> 💡 **Tip**: These commands use Azure Developer CLI (azd) and let GitHub Copilot Coding Agent generate all the Bicep infrastructure files for you!
 
 ### 1. Install azd (if not already installed)
 ```powershell
@@ -36,7 +38,9 @@ curl -fsSL https://aka.ms/install-azd.sh | bash
 
 ### 2. Let GitHub Copilot Generate Infrastructure
 
-**Copy this prompt into GitHub Copilot Chat** (Ctrl+Shift+I or Cmd+Shift+I):
+**🤖 Let the GitHub Copilot Coding Agent create all Bicep files and deployment scripts for you!**
+
+**Copy this exact prompt into GitHub Copilot Chat** (Ctrl+Shift+I or Cmd+Shift+I):
 ```
 @workspace Create Azure infrastructure using Bicep for deploying this Spring Boot application to Azure Container Apps. Include:
 
@@ -60,6 +64,14 @@ curl -fsSL https://aka.ms/install-azd.sh | bash
 
 After generating, test with: azd up
 ```
+
+**What GitHub Copilot will create for you:**
+- ✅ `infra/` folder with complete Bicep templates
+- ✅ `azure.yaml` configuration file  
+- ✅ All necessary parameters and configurations
+- ✅ Production-ready infrastructure code
+
+**No manual Bicep coding required!** Just copy the prompt above and let Copilot do the work.
 
 ### 3. Deploy to Azure
 ```powershell
