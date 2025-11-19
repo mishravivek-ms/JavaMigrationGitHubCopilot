@@ -4,6 +4,8 @@
 
 ## 🎯 At a Glance
 
+**Codebase Size**: 6 Java files (~709 lines) + 3 config files
+
 | Aspect | Current | Target | Effort |
 |--------|---------|--------|--------|
 | **JDK** | 1.8 | 17 LTS | 2-3 hours |
@@ -12,7 +14,7 @@
 | **Date API** | java.util.Date | java.time | 4-6 hours |
 | **Logging** | Log4j 1.x | SLF4J | 1-2 hours |
 | **Deployment** | JAR | Docker | 3-5 hours |
-| **Total** | - | - | **29-45 hours** |
+| **Total** | - | - | **29-45 hours (4-6 days)** |
 
 ## 🚀 Recommended Deployment: Azure Container Apps
 
@@ -94,16 +96,19 @@ Logger logger = LoggerFactory.getLogger(MyClass.class);
 
 ## 📁 Files to Change
 
-| File | Changes Needed |
-|------|----------------|
-| `pom.xml` | Parent version, dependencies, Java 17 |
-| `Message.java` | javax → jakarta, Date → LocalDateTime |
-| `MessageController.java` | javax → jakarta, @RestController, Date, Log4j |
-| `MessageService.java` | Date → LocalDateTime, Commons Lang 3 |
-| `MessageRepository.java` | Date parameters → LocalDateTime |
-| `MessageScheduledTask.java` | Date → LocalDateTime, Log4j, remove finalize() |
-| `Application.java` | No changes needed ✅ |
-| **(new)** `Dockerfile` | Create for containerization |
+| File | Lines | Time | Changes Needed |
+|------|-------|------|----------------|
+| `pom.xml` | N/A | 1-2h | Parent version, dependencies, Java 17 |
+| `application.properties` | N/A | 0.5h | Logging config verification |
+| `log4j.properties` | N/A | 0.5h | Remove (migrate to Logback) |
+| `Message.java` | 138 | 2-3h | javax → jakarta, Date → LocalDateTime, @Type fix |
+| `MessageController.java` | 276 | 3-4h | javax → jakarta, @RestController, Date, Log4j, constructor injection |
+| `MessageService.java` | 101 | 2-3h | Date → LocalDateTime, Commons Lang 3, constructor injection |
+| `MessageRepository.java` | 44 | 1-2h | Date parameters → LocalDateTime |
+| `MessageScheduledTask.java` | 125 | 2-3h | Date → LocalDateTime, Log4j, remove finalize(), constructor injection |
+| `Application.java` | 25 | 0.5h | Verify compatibility ✅ |
+| **(new)** `Dockerfile` | N/A | 1-2h | Create for containerization |
+| **Total** | **~709 Java lines** | **12-16h** | **Code modernization** |
 
 ## ⚠️ Critical Risks
 

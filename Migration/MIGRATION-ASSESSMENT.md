@@ -11,8 +11,13 @@
 
 This document provides a comprehensive assessment for migrating the Message Service Legacy application from Spring Boot 2.7.18 (JDK 1.8) to Spring Boot 3.x (JDK 17). The application consists of a REST API, a scheduled task running every minute, and a JPA data layer using H2 in-memory database.
 
+**Application Scope**:
+- 6 Java files (~709 lines of code)
+- 3 configuration files (pom.xml, application.properties, log4j.properties)
+- 1 new file to create (Dockerfile)
+
 **Key Findings**:
-- Migration is **feasible** with moderate effort (2-3 days)
+- Migration is **feasible** with moderate effort (29-45 hours / 4-6 days)
 - Major breaking changes in package namespaces (javax → jakarta)
 - Scheduled task requirement (every 60 seconds) can be preserved
 - Recommended deployment: **Azure Container Apps** for cost-effectiveness and simplicity
@@ -1318,6 +1323,54 @@ curl http://localhost:8080/api/messages
 | **Documentation** | 2-3 hours | Update README, deployment guide |
 | **Contingency (15%)** | 4-6 hours | Bug fixes, unexpected issues |
 | **TOTAL** | **29-45 hours** | **4-6 days** |
+
+### Detailed Breakdown by Component
+
+This section provides a granular breakdown of effort for each file and component in the codebase.
+
+#### Configuration Files (3-4 hours)
+
+| File | Estimated Time | Changes Required |
+|------|----------------|------------------|
+| **pom.xml** | 1-2 hours | Spring Boot parent 2.7.18→3.3.5, Java 1.8→17, remove Log4j, add Commons Lang 3, update H2 version |
+| **application.properties** | 0.5 hours | Update logging properties (if needed), verify H2 settings |
+| **log4j.properties** | 0.5 hours | Remove file (migrate to Logback via application.properties) |
+| **Dockerfile** (new) | 1-2 hours | Create new file for containerization |
+
+#### Java Files - Code Modernization (12-16 hours)
+
+| File | Lines | Estimated Time | Changes Required |
+|------|-------|----------------|------------------|
+| **Application.java** | 25 | 0.5 hours | Minimal changes - verify Spring Boot 3.x compatibility, test startup |
+| **Message.java** | 138 | 2-3 hours | • javax→jakarta imports (persistence, validation)<br>• Date→LocalDateTime (createdDate, updatedDate)<br>• Remove @Temporal annotations<br>• Fix @Type annotation for Hibernate 6<br>• Remove deprecated Boolean constructor<br>• Update @PrePersist and @PreUpdate<br>• Test entity persistence |
+| **MessageRepository.java** | 44 | 1-2 hours | • javax→jakarta imports<br>• Update Date parameters→LocalDateTime<br>• Verify query methods<br>• Test all repository operations |
+| **MessageService.java** | 101 | 2-3 hours | • Change Date/Calendar→LocalDateTime<br>• Update Commons Lang 2.x→3.x imports<br>• Field injection→Constructor injection<br>• Update date arithmetic logic<br>• Test all service methods |
+| **MessageController.java** | 276 | 3-4 hours | • javax→jakarta imports (servlet, validation)<br>• @Controller+@ResponseBody→@RestController<br>• @RequestMapping(method=GET)→@GetMapping<br>• SimpleDateFormat→DateTimeFormatter<br>• Log4j→SLF4J imports<br>• Field injection→Constructor injection<br>• Date→LocalDateTime in responses<br>• Test all REST endpoints |
+| **MessageScheduledTask.java** | 125 | 2-3 hours | • Log4j→SLF4J imports<br>• Date/Calendar→LocalDateTime<br>• SimpleDateFormat→DateTimeFormatter<br>• Remove finalize() method<br>• Remove deprecated Integer constructor<br>• Field injection→Constructor injection<br>• Verify 60-second schedule works<br>• Test scheduled execution |
+
+#### Summary by File Type
+
+| Component | Files | Total Lines | Estimated Time |
+|-----------|-------|-------------|----------------|
+| Configuration | 3 (+ 1 new) | N/A | 3-4 hours |
+| Java Classes | 6 | ~709 lines | 12-16 hours |
+| Testing & Validation | N/A | N/A | 6-8 hours |
+| Container & Azure | N/A | N/A | 8-12 hours |
+| **Total** | **9-10 files** | **~709 Java lines** | **29-40 hours** |
+
+#### Clarification on Scope
+
+**Actual Repository Size**:
+- Java files: 6 (not 50+)
+- Configuration files: 3 (pom.xml, application.properties, log4j.properties)
+- Total files to modify: 9 files
+
+**Note**: If your repository has 50+ Java classes not visible in the main branch, the effort estimate would need to be scaled accordingly. For each additional Java class with similar complexity:
+- Simple class (entity/DTO): +0.5-1 hour
+- Service/Controller class: +1-2 hours
+- Complex class with legacy patterns: +2-3 hours
+
+For a 50-class codebase, total effort would be approximately **80-120 hours (2-3 weeks)**.
 
 ### Estimation by Team Experience
 
