@@ -7,8 +7,8 @@
 - Build the migrated application
 - Run and test locally
 - Verify all functionality works
-- Test with Docker
 - Validate migration success
+- (Optional) Test with Docker
 
 ## 📋 Prerequisites
 
@@ -16,8 +16,8 @@
 - [ ] PR merged to main branch
 - [ ] JDK 17+ installed and configured
 - [ ] Maven 3.6+ installed
-- [ ] Docker installed (for container testing)
 - [ ] Git repository up to date
+- [ ] (Optional) Docker installed (if you want to test containerization)
 
 ## 🚀 Getting Started
 
@@ -314,7 +314,9 @@ $response.count
    - Check `CREATED_DATE` column format
    - Verify `IS_ACTIVE` column values
 
-## 🐳 Docker Testing
+## 🐳 Docker Testing (Optional)
+
+> **Note**: Docker testing is optional for Azure App Service deployment. Since App Service deploys the JAR directly, you can skip this section and proceed to Step 6 if you prefer. However, if you plan to use Container Apps instead, this section is useful.
 
 ### Step 5.8: Build Docker Image
 
@@ -416,7 +418,7 @@ Complete testing validation:
 - [ ] H2 console accessible
 - [ ] Date fields stored correctly (LocalDateTime)
 
-### Docker
+### Docker (Optional - skip if not using Container Apps)
 - [ ] Docker image builds successfully
 - [ ] Container runs without errors
 - [ ] API accessible from host
@@ -531,11 +533,11 @@ Before moving to Step 6:
 - [ ] Scheduled task verified running every 60 seconds
 - [ ] All REST API endpoints tested and working
 - [ ] H2 console accessible and functional
-- [ ] Docker image builds successfully
-- [ ] Container runs and API accessible
+- [ ] (Optional) Docker image builds successfully
+- [ ] (Optional) Container runs and API accessible
 - [ ] No errors or warnings in logs
 - [ ] All migration changes validated
-- [ ] Ready for Azure deployment
+- [ ] Ready for Azure App Service deployment
 
 ## 🎓 Key Takeaways
 

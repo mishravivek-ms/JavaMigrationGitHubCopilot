@@ -93,7 +93,7 @@ In this step, you'll create a GitHub Issue asking Copilot to:
 - **JDK**: 17 LTS (or 21 LTS)
 - **Spring Boot**: 3.x (latest stable, includes Spring Framework 6.x)
 - **Packages**: jakarta.* namespace (Jakarta EE 9+)
-- **Deployment**: Azure Container Apps
+- **Deployment**: Azure App Service
 - **Logging**: SLF4J with Logback (Spring Boot default)
 - **Best Practices**: Constructor injection, modern APIs, @RestController
 
@@ -104,7 +104,7 @@ In this step, you'll create a GitHub Issue asking Copilot to:
 4. ✅ Deploy to Azure cloud
 5. ✅ Follow Spring Boot 3.x best practices
 6. ✅ Update to modern Java APIs (java.time, etc.)
-7. ✅ Containerize for cloud deployment (Docker)
+7. ✅ Use Azure Developer CLI (azd) for streamlined deployment
 
 ## Assessment Requests
 
@@ -130,11 +130,11 @@ For each option, provide:
 - Best use case
 
 Example options to consider:
-- Azure App Service + Azure Functions (Timer)
-- Azure Container Apps
-- Azure Spring Apps
-- Azure Kubernetes Service (AKS)
-- All-in Azure Functions (HTTP + Timer)
+- Azure App Service (recommended for simplicity)
+- Azure Container Apps (if containerization preferred)
+- Azure Spring Apps (Spring-optimized platform)
+- Azure Functions (serverless approach)
+- AKS (for complex orchestration needs)
 
 ### 3. Recommended Approach
 Based on the analysis:
@@ -257,8 +257,8 @@ Example table format:
 
 | Option | Services | API Hosting | Scheduled Task | Complexity | Cost | Pros | Cons |
 |--------|----------|-------------|----------------|------------|------|------|------|
-| App Service + Functions | 2 services | App Service | Function Timer | Moderate | $$ | Managed | 2 services |
-| Container Apps | 1 service | Container Apps | Scheduled Job | Simple | $ | Modern | Learning curve |
+| App Service | 1 service | App Service | @Scheduled in app | Simple | $ | Managed, No Docker | Requires alwaysOn |
+| Container Apps | 1 service | Container Apps | @Scheduled in app | Moderate | $ | Modern | Docker knowledge |
 | ... | ... | ... | ... | ... | ... | ... | ... |
 
 ### Recommendation

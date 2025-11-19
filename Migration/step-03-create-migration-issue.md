@@ -110,30 +110,32 @@ Based on the assessment, implement a complete migration from:
 - [ ] Create logback-spring.xml (or use Spring Boot defaults)
 - [ ] Update all log statements if needed
 
-### 2. Azure Deployment - Container Apps Approach
+### 2. Azure Deployment - App Service Approach
 
-**Selected Approach**: Azure Container Apps
+**Selected Approach**: Azure App Service
 
 Please implement:
 
-#### Dockerfile
-- [ ] Create Dockerfile for the Spring Boot application
-- [ ] Use appropriate Java 17 base image
-- [ ] Copy JAR file and configure entrypoint
-- [ ] Expose port 8080
-- [ ] Follow Docker best practices
+#### Azure Developer CLI (azd) Configuration
+- [ ] Create azure.yaml file for azd configuration
+- [ ] Define the Spring Boot application as a service
+- [ ] Configure Java 17 runtime
+- [ ] Set up environment variables
 
-#### Azure Configuration
-- [ ] Create deployment documentation for Azure Container Apps
-- [ ] Include steps for creating Container Apps environment
-- [ ] Document how to deploy the container
-- [ ] Explain how scheduled task works in Container Apps
-- [ ] Provide CLI commands or ARM template
+#### Infrastructure as Code (Bicep)
+- [ ] Create infra/main.bicep for resource group and module orchestration
+- [ ] Create infra/resources.bicep for App Service Plan and App Service
+- [ ] Configure Basic B1 tier (or higher) for alwaysOn support
+- [ ] Set linuxFxVersion to 'JAVA|17-java17'
+- [ ] Enable Application Insights for monitoring
+- [ ] Configure health check endpoint (/api/messages)
+- [ ] Set required app settings (APPLICATIONINSIGHTS_CONNECTION_STRING, PORT, SPRING_PROFILES_ACTIVE)
 
 #### Environment Configuration
 - [ ] Document required environment variables
 - [ ] Configure H2 console access if needed
 - [ ] Set up health check endpoints
+- [ ] Enable alwaysOn for scheduled tasks
 
 ### 3. Critical Requirements
 
@@ -165,17 +167,18 @@ Please provide:
 - [ ] How to test endpoints (curl examples)
 - [ ] How to verify scheduled task is running
 
-#### Docker Testing
-- [ ] How to build Docker image locally
-- [ ] How to run container locally
-- [ ] How to test in container environment
+#### Azure Developer CLI (azd) Testing
+- [ ] How to initialize azd environment (`azd init`)
+- [ ] How to deploy to Azure (`azd up`)
+- [ ] How to test deployed application endpoints
 
 #### Azure Deployment Guide
-- [ ] Step-by-step Azure Container Apps deployment
-- [ ] Required Azure CLI commands
-- [ ] Configuration steps
-- [ ] How to monitor/troubleshoot
-- [ ] How to view logs
+- [ ] Step-by-step Azure App Service deployment with azd
+- [ ] Required Azure CLI and azd commands
+- [ ] Configuration steps (azure.yaml, Bicep files)
+- [ ] How to monitor with Application Insights
+- [ ] How to view App Service logs
+- [ ] Cost estimates for Basic B1 tier
 
 #### Migration Summary Document
 - [ ] List of files changed
@@ -208,9 +211,10 @@ Create a Pull Request with:
    - Updated pom.xml
    - Removed legacy files
 
-3. **Docker configuration**
-   - Dockerfile
-   - .dockerignore (if needed)
+3. **Azure deployment configuration**
+   - azure.yaml (azd configuration)
+   - infra/main.bicep (resource group and orchestration)
+   - infra/resources.bicep (App Service Plan and App Service)
 
 4. **Documentation**
    - MIGRATION.md (summary of changes)
@@ -251,7 +255,7 @@ Please structure the PR description as:
 - [ ] Application starts successfully
 - [ ] API endpoints work
 - [ ] Scheduled task runs every minute
-- [ ] Docker image builds
+- [ ] Azure deployment files (azure.yaml, Bicep) complete
 - [ ] Documentation complete
 ```
 
@@ -298,7 +302,7 @@ based on the assessment in issue #1.
    - Update all Java files
    - Modify build configuration
    - Create new configuration files
-   - Generate Docker setup
+   - Generate Azure deployment files (azd + Bicep)
    - Write documentation
 
 3. **Create Pull Request** (2-5 min)
@@ -329,17 +333,19 @@ Use this time to:
    # Verify Maven
    mvn -version
    
-   # Verify Docker (if using Container Apps)
-   docker --version
+   # Verify Azure CLI and azd
+   az --version
+   azd version
    ```
 
 3. **Read Spring Boot docs**:
    - [Spring Boot 3.0 Release Notes](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Release-Notes)
    - [Spring Boot 3.0 Migration Guide](https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-3.0-Migration-Guide)
 
-4. **Review Azure Container Apps docs**:
-   - [Azure Container Apps Overview](https://learn.microsoft.com/en-us/azure/container-apps/overview)
-   - [Deploy to Container Apps](https://learn.microsoft.com/en-us/azure/container-apps/quickstart-portal)
+4. **Review Azure App Service docs**:
+   - [Azure App Service Overview](https://learn.microsoft.com/en-us/azure/app-service/overview)
+   - [Deploy Java Apps to App Service](https://learn.microsoft.com/en-us/azure/app-service/quickstart-java)
+   - [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/overview)
 
 ## 🔍 Monitoring Progress
 
@@ -399,12 +405,12 @@ We'll do the rest iteratively.
 
 **Example**:
 ```markdown
-Which specific Azure Container Apps tier should I target - Consumption or Dedicated?
+Which specific Azure App Service tier should I target - Free, Basic, or Standard?
 ```
 
 **Response**:
 ```markdown
-@copilot Please target the Consumption tier for Azure Container Apps, as it's cost-effective for this workshop scenario.
+@copilot Please target the Basic B1 tier for Azure App Service, as it supports alwaysOn for scheduled tasks while remaining cost-effective for this workshop scenario.
 ```
 
 ## 📋 Expected PR Structure
@@ -424,8 +430,9 @@ Modified:
 
 Added:
   - src/main/java/.../Application.java
-  - Dockerfile
-  - .dockerignore
+  - azure.yaml
+  - infra/main.bicep
+  - infra/resources.bicep
   - MIGRATION.md
   - DEPLOYMENT.md
 
@@ -449,12 +456,12 @@ Before moving to Step 4:
 
 - [ ] Migration issue created with clear requirements
 - [ ] Referenced assessment issue for context
-- [ ] Specified chosen Azure approach (Container Apps)
+- [ ] Specified chosen Azure approach (App Service with azd)
 - [ ] Listed all required migration tasks
-- [ ] Emphasized critical requirements (scheduled task)
+- [ ] Emphasized critical requirements (scheduled task, alwaysOn)
 - [ ] Requested comprehensive documentation
 - [ ] Copilot has created a Pull Request
-- [ ] PR includes code changes and documentation
+- [ ] PR includes code changes, azd configuration, and Bicep files
 
 ## 🎓 Key Takeaways
 

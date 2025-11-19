@@ -528,65 +528,105 @@ public class MessageScheduledTask {
 - [ ] finalize() method removed
 - [ ] Deprecated Integer constructor removed
 
-## 8️⃣ Docker Configuration Review
+## 8️⃣ Azure Deployment Configuration Review
 
-### File: `Dockerfile`
+### File: `azure.yaml`
 
 **What to Check**:
 
-```dockerfile
-FROM eclipse-temurin:17-jre-alpine
-
-WORKDIR /app
-
-COPY target/*.jar app.jar
-
-EXPOSE 8080
-
-ENTRYPOINT ["java", "-jar", "app.jar"]
-```
-
-**Alternative Multi-stage Build**:
-
-```dockerfile
-# Build stage
-FROM maven:3.9-eclipse-temurin-17 AS build
-WORKDIR /app
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
-
-# Run stage
-FROM eclipse-temurin:17-jre-alpine
-WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+```yaml
+name: message-service
+services:
+  api:
+    project: .
+    language: java
+    host: appservice
 ```
 
 **Review Checklist**:
-- [ ] Uses Java 17 base image
-- [ ] Appropriate WORKDIR set
-- [ ] JAR file copied correctly
-- [ ] Port 8080 exposed
-- [ ] ENTRYPOINT configured
-- [ ] (Optional) Multi-stage build for optimization
+- [ ] Service name defined correctly
+- [ ] Project path set to root (.)
+- [ ] Language specified as java
+- [ ] Host set to appservice
 
-### File: `.dockerignore`
+### File: `infra/main.bicep`
 
-```
-target/
-.mvn/
-mvnw
-mvnw.cmd
-.git/
-.gitignore
-*.md
+**What to Check**:
+
+```bicep
+targetScope = 'subscription'
+
+param environmentName string
+param location string
+
+resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+  name: 'rg-${environmentName}'
+  location: location
+}
+
+module resources 'resources.bicep' = {
+  name: 'resources'
+  scope: rg
+  params: {
+    location: location
+    environmentName: environmentName
+  }
+}
 ```
 
 **Review Checklist**:
-- [ ] Excludes unnecessary files
-- [ ] Reduces image size
+- [ ] Subscription-level deployment
+- [ ] Resource group creation
+- [ ] Calls resources.bicep module
+
+### File: `infra/resources.bicep`
+
+**What to Check**:
+
+```bicep
+// App Service Plan (Basic B1 or higher for alwaysOn)
+resource appServicePlan 'Microsoft.Web/serverfarms@2022-03-01' = {
+  name: 'plan-${uniqueString(resourceGroup().id)}'
+  location: location
+  sku: {
+    name: 'B1'
+    tier: 'Basic'
+  }
+  kind: 'linux'
+  properties: {
+    reserved: true
+  }
+}
+
+// App Service
+resource appService 'Microsoft.Web/sites@2022-03-01' = {
+  name: 'app-${uniqueString(resourceGroup().id)}'
+  location: location
+  properties: {
+    serverFarmId: appServicePlan.id
+    siteConfig: {
+      linuxFxVersion: 'JAVA|17-java17'
+      alwaysOn: true
+      healthCheckPath: '/api/messages'
+      appSettings: [
+        {
+          name: 'PORT'
+          value: '8080'
+        }
+      ]
+    }
+  }
+}
+```
+
+**Review Checklist**:
+- [ ] App Service Plan SKU is Basic B1 or higher (for alwaysOn)
+- [ ] Linux runtime configured
+- [ ] Java 17 runtime specified
+- [ ] alwaysOn enabled (critical for scheduled tasks)
+- [ ] Health check endpoint configured
+- [ ] PORT set to 8080
+- [ ] Application Insights configured (if applicable)
 
 ## 9️⃣ Documentation Review
 
@@ -603,11 +643,12 @@ Should include:
 ### File: `DEPLOYMENT.md`
 
 Should include:
-- [ ] Azure Container Apps setup
-- [ ] Prerequisites (Azure CLI, Docker)
-- [ ] Step-by-step deployment
+- [ ] Azure App Service deployment with azd
+- [ ] Prerequisites (Azure CLI, azd)
+- [ ] Step-by-step deployment (`azd up`)
 - [ ] Environment variables
-- [ ] Monitoring and logs
+- [ ] Monitoring with Application Insights
+- [ ] App Service logs access
 - [ ] Troubleshooting tips
 
 ### File: `README.md` (Updated)
@@ -615,8 +656,8 @@ Should include:
 Should include:
 - [ ] Updated technology stack
 - [ ] New build/run instructions
-- [ ] Docker instructions
-- [ ] Azure deployment reference
+- [ ] Azure deployment with azd
+- [ ] Cost estimates for Basic B1 tier
 
 ## 🧪 Quick Validation Tests
 
@@ -678,21 +719,25 @@ Before approving the PR:
 - [ ] H2 database configured
 - [ ] All REST endpoints preserved
 
-### Docker & Deployment
-- [ ] Dockerfile present and correct
-- [ ] Uses Java 17 image
+### Azure Deployment Configuration
+- [ ] azure.yaml present and correct
+- [ ] infra/main.bicep creates resource group
+- [ ] infra/resources.bicep defines App Service Plan and App Service
+- [ ] Basic B1 or higher tier (for alwaysOn)
+- [ ] Java 17 runtime configured
+- [ ] alwaysOn enabled
 - [ ] Deployment documentation complete
 
 ### Documentation
 - [ ] MIGRATION.md explains changes
-- [ ] DEPLOYMENT.md has Azure steps
+- [ ] DEPLOYMENT.md has Azure App Service deployment with azd
 - [ ] README.md updated
 
 ### Testing Instructions
 - [ ] Local build instructions
 - [ ] Local run instructions
 - [ ] API testing examples
-- [ ] Docker testing steps
+- [ ] Azure deployment with azd steps
 
 ## 💬 Requesting Changes
 
@@ -747,7 +792,7 @@ Before moving to Step 5:
 - [ ] Validated build configuration
 - [ ] Checked code migrations
 - [ ] Verified critical requirements
-- [ ] Examined Docker setup
+- [ ] Examined Azure deployment configuration (azd + Bicep)
 - [ ] Read documentation
 - [ ] Requested changes if needed
 - [ ] Approved PR (or ready to merge after fixes)
