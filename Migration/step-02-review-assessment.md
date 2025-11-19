@@ -178,20 +178,23 @@ Consider these factors:
 
 1. **Team Skills**
    - Familiar with Docker? → Container Apps
-   - Traditional Java team? → App Service
+   - Traditional Java team? → **App Service** ✅
    - Want serverless? → Functions
 
 2. **Budget**
    - Cost-conscious? → Container Apps or Functions
+   - Moderate budget? → **App Service** ✅
    - Enterprise budget? → Spring Apps
 
 3. **Complexity Tolerance**
-   - Simple deployment? → App Service or Spring Apps
+   - **Simple deployment?** → **App Service** ✅
    - Modern practices? → Container Apps
+   - Enterprise features? → Spring Apps
 
 4. **Future Plans**
    - Microservices architecture? → Container Apps
-   - Stick with monolith? → App Service or Spring Apps
+   - **Simple REST API?** → **App Service** ✅
+   - Enterprise Spring apps? → Spring Apps
 
 ## 3️⃣ Effort Estimation
 
@@ -351,16 +354,18 @@ Before proceeding to Step 3, decide:
 
 For learning purposes, we recommend:
 
-**Option: Azure Container Apps**
+**Option: Azure App Service**
 
 **Why?**:
-- ✅ Modern, cloud-native approach
-- ✅ Single service to manage
-- ✅ Cost-effective
-- ✅ Good learning experience
-- ✅ Industry-relevant skills
+- ✅ Simple and quick deployment
+- ✅ Fully managed PaaS platform
+- ✅ No Docker/containerization required
+- ✅ Easy to learn and use
+- ✅ Built-in Java 17 support
+- ✅ Perfect for REST APIs with scheduled tasks
+- ✅ Works great with Azure Developer CLI (azd)
 
-**Alternative**: If Docker is unfamiliar, choose **App Service + Functions**
+**Alternative**: If you want modern cloud-native approach, choose **Azure Container Apps**
 
 ## 📝 Document Your Decision
 
@@ -371,28 +376,32 @@ Create a comment on the issue with your decision:
 
 After reviewing the assessment, I've decided to proceed with:
 
-**Chosen Approach**: Azure Container Apps
+**Chosen Approach**: Azure App Service
 
 **Rationale**:
-- Modern cloud-native deployment
-- Single containerized application
-- Cost-effective for workshop scope
-- Learning opportunity for Docker/containers
+- Simple and quick deployment process
+- Fully managed platform (no infrastructure management)
+- Native Java 17 support built-in
+- No containerization knowledge required
+- Perfect for REST API with scheduled tasks
+- Easy deployment with Azure Developer CLI (azd)
+- Cost-effective with Basic tier (~$13-15/month)
 
 **Next Steps**:
 1. Create migration issue in Step 3
 2. Request Copilot to implement this approach
-3. Include Docker configuration in the migration
+3. Use azd for streamlined deployment
 
 **Risks Acknowledged**:
-- Need to learn Docker basics
-- Container runtime differences from local
-- Monitoring containerized app
+- Need to ensure alwaysOn is enabled for scheduled tasks
+- Monitor application performance and logs
+- May need adequate tier for alwaysOn support
 
 **Mitigation**:
-- Follow Copilot's Docker guidance
-- Test locally with Docker before Azure deploy
-- Use Azure Container Apps monitoring tools
+- Use Basic tier or higher (enables alwaysOn feature)
+- Enable Application Insights for monitoring
+- Test scheduled task execution in Azure environment
+- Use App Service logs for troubleshooting
 ```
 
 ## 🔄 If You Need More Information
@@ -402,13 +411,15 @@ Don't hesitate to ask follow-up questions:
 ```markdown
 @copilot Before proceeding, I need clarification on:
 
-1. **Scheduled Task**: How exactly will the every-minute schedule be implemented in Azure Container Apps? Will it use cron jobs or another mechanism?
+1. **Scheduled Task**: How exactly will the every-60-second schedule be implemented in Azure App Service? Will @Scheduled annotation work automatically?
 
-2. **Database**: Will H2 in-memory database work the same way in a container? Any configuration changes needed?
+2. **Database**: Will H2 in-memory database work the same way in Azure App Service? Any configuration changes needed?
 
-3. **Logging**: How will we access logs from the containerized application in Azure?
+3. **Logging**: How will we access logs from the application in Azure App Service?
 
-4. **Cost**: Can you provide a rough monthly cost estimate for Azure Container Apps for this app?
+4. **Cost**: Can you provide a rough monthly cost estimate for Azure App Service (Basic tier) for this app?
+
+5. **AlwaysOn**: Is alwaysOn required to keep the scheduled task running continuously?
 ```
 
 ## ✅ Checklist - Step 2 Complete
