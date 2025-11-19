@@ -5,11 +5,11 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Spring Boot 2.7.x Parent (Legacy but compatible with modern JDKs) -->
+    <!-- Spring Boot 3.3.6 Parent (Modern) -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.18</version>
+        <version>3.3.6</version>
         <relativePath/>
     </parent>
 
@@ -18,19 +18,18 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>Message Service Legacy</name>
-    <description>Legacy Spring Boot 2.7.x application on JDK 1.8 for migration workshop</description>
+    <name>Message Service</name>
+    <description>Spring Boot 3.3.6 application on JDK 17</description>
 
     <properties>
-        <!-- JDK 1.8 Configuration -->
-        <java.version>1.8</java.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- JDK 17 Configuration -->
+        <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         
-        <!-- Legacy versions for demonstration -->
-        <commons-lang.version>2.6</commons-lang.version>
-        <log4j.version>1.2.17</log4j.version>
+        <!-- Modern versions -->
+        <commons-lang3.version>3.17.0</commons-lang3.version>
     </properties>
 
     <dependencies>
@@ -59,18 +58,11 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         
-        <!-- Commons Lang 2.x (deprecated, use 3.x in modern apps) -->
+        <!-- Commons Lang 3.x -->
         <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
-        </dependency>
-        
-        <!-- Log4j 1.x (deprecated, for legacy code demonstration) -->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
     </dependencies>
 

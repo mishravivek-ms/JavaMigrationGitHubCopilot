@@ -2,34 +2,27 @@ package com.nytour.demo.service;
 
 import com.nytour.demo.model.Message;
 import com.nytour.demo.repository.MessageRepository;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * Message Service - Legacy Spring 4.x patterns
- * 
- * MIGRATION CHALLENGES:
- * 1. Field injection (@Autowired on fields) is discouraged in modern Spring
- * 2. Calendar and Date APIs are deprecated (use java.time)
- * 3. Commons Lang 2.x (deprecated, migrate to Commons Lang 3.x)
- * 4. Manual null checking instead of Optional
+ * Message Service - Spring Boot 3.x patterns
  */
 @Service
 @Transactional
 public class MessageService {
 
-    // Field injection (legacy pattern, constructor injection preferred in modern Spring)
-    @Autowired
-    private MessageRepository messageRepository;
+    private final MessageRepository messageRepository;
+
+    public MessageService(MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
+    }
 
     public Message createMessage(String content, String author) {
-        // Using deprecated commons-lang StringUtils (version 2.x)
         if (StringUtils.isEmpty(content) || StringUtils.isEmpty(author)) {
             throw new IllegalArgumentException("Content and author cannot be empty");
         }
@@ -45,8 +38,7 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public Message getMessageById(Long id) {
-        // Legacy pattern: direct get without Optional handling
-        Message message = messageRepository.findById(id).orElse(null); // Using findById for Spring Boot 2.x
+        Message message = messageRepository.findById(id).orElse(null);
         if (message == null) {
             throw new RuntimeException("Message not found with id: " + id);
         }
@@ -56,10 +48,7 @@ public class MessageService {
     public Message updateMessage(Long id, String content) {
         Message message = getMessageById(id);
         message.setContent(content);
-        
-        // Using deprecated Date and Calendar APIs
-        Calendar calendar = Calendar.getInstance();
-        message.setUpdatedDate(calendar.getTime());
+        message.setUpdatedDate(LocalDateTime.now());
         
         return messageRepository.save(message);
     }
@@ -76,10 +65,7 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public List<Message> getRecentMessages(int daysAgo) {
-        // Using deprecated Calendar API to calculate date
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_MONTH, -daysAgo);
-        Date cutoffDate = calendar.getTime();
+        LocalDateTime cutoffDate = LocalDateTime.now().minusDays(daysAgo);
         
         return messageRepository.findRecentActiveMessages(cutoffDate);
     }
@@ -91,7 +77,6 @@ public class MessageService {
 
     @Transactional(readOnly = true)
     public List<Message> searchMessages(String keyword) {
-        // Trim using commons-lang 2.x
         String trimmedKeyword = StringUtils.trim(keyword);
         if (StringUtils.isEmpty(trimmedKeyword)) {
             return getAllMessages();
