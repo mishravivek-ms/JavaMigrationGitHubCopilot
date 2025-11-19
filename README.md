@@ -2,6 +2,23 @@
 
 Welcome to the Java Application Migration Workshop! This hands-on workshop teaches you how to use **GitHub Copilot as an autonomous team member** to modernize legacy Java applications.
 
+## ✅ Migration Status: COMPLETED
+
+This repository now contains a **fully migrated** Spring Boot 3.x application running on JDK 17!
+
+### Migration Summary
+- ✅ **JDK 1.8** → **JDK 17** (LTS)
+- ✅ **Spring Boot 2.7.18** → **Spring Boot 3.3.6** (includes Spring 6.x)
+- ✅ **javax.\* packages** → **jakarta.\* packages**
+- ✅ **Log4j 1.x** → **SLF4J/Logback**
+- ✅ **Commons Lang 2.x** → **Commons Lang 3.x**
+- ✅ **java.util.Date** → **java.time.LocalDateTime**
+- ✅ **Field injection** → **Constructor injection**
+- ✅ **Legacy patterns** → **Modern best practices**
+- ✅ **Azure deployment ready** (App Service with Bicep)
+
+**See [MIGRATION.md](MIGRATION.md) for detailed changes.**
+
 ## 🎯 Workshop Overview
 
 Learn to migrate a legacy Java application from:
@@ -9,17 +26,22 @@ Learn to migrate a legacy Java application from:
 - **Spring Boot 2.7.x** → **Spring Boot 3.x** (includes Spring 6.x)
 - **javax.\* packages** → **jakarta.\* packages**
 - **Legacy code patterns** → **Modern best practices**
-- **Traditional deployment** → **Cloud-native deployment** (Azure Container Apps)
+- **Traditional deployment** → **Cloud-native deployment** (Azure App Service)
 
 ## 📋 Prerequisites
 
-- **GitHub Account** with Copilot access
-- **JDK 1.8** installed (for running the legacy app)
-- **JDK 17 or higher** installed (for the migrated app)
+### For Running the Migrated Application
+- **JDK 17 or higher** installed
 - **Maven 3.6+** installed
 - **Git** installed
 - **VS Code** or **IntelliJ IDEA** (recommended)
-- **Azure Account** (for deployment steps, optional)
+
+### For Azure Deployment (Optional)
+- **Azure Account** with active subscription
+- **Azure CLI** (2.50.0+)
+- **Azure Developer CLI (azd)** (1.5.0+)
+
+**See [DEPLOYMENT.md](DEPLOYMENT.md) for Azure deployment instructions.**
 
 ## 🏗️ Legacy Application Architecture
 
@@ -31,17 +53,17 @@ This workshop includes a complete legacy Spring 4.x application with:
 - **JPA/Hibernate** - Data persistence with H2 in-memory database
 - **Spring Boot** - Legacy 2.7.x with intentional outdated patterns
 
-### Technology Stack (Legacy)
-| Component | Version | Modern Alternative |
-|-----------|---------|-------------------|
-| JDK | 1.8 | JDK 17/21 |
-| Spring Boot | 2.7.18 | Spring Boot 3.x |
-| Spring Framework | 5.3.31 | Spring Framework 6.x |
-| Hibernate | 5.6.15 | Hibernate 6.x |
-| javax.* packages | javax | jakarta.* (EE 9+) |
-| Log4j | 1.2.17 | SLF4J/Logback |
-| Commons Lang | 2.6 | Commons Lang 3.x |
-| Date/Time API | java.util.Date | java.time.* |
+### Technology Stack
+| Component | Before (Legacy) | After (Current) |
+|-----------|-----------------|-----------------|
+| JDK | 1.8 | ✅ JDK 17 |
+| Spring Boot | 2.7.18 | ✅ Spring Boot 3.3.6 |
+| Spring Framework | 5.3.31 | ✅ Spring Framework 6.x |
+| Hibernate | 5.6.15 | ✅ Hibernate 6.x |
+| Packages | javax.* | ✅ jakarta.* (EE 9+) |
+| Logging | Log4j 1.2.17 | ✅ SLF4J/Logback |
+| Commons Lang | 2.6 | ✅ Commons Lang 3.17.0 |
+| Date/Time API | java.util.Date | ✅ java.time.* |
 
 ### Migration Challenges
 
@@ -56,20 +78,20 @@ The legacy code intentionally includes patterns that require real migration work
 7. **Deprecated APIs** - Remove obsolete constructors and methods
 8. **WAR → JAR/Container** - Packaging and deployment changes
 
-## 🚀 Quick Start - Running the Legacy Application
+## 🚀 Quick Start - Running the Migrated Application
 
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd JavaSample
+git clone https://github.com/mishravivek-ms/JavaMigrationGitHubCopilot.git
+cd JavaMigrationGitHubCopilot
 ```
 
-### 2. Verify JDK 1.8
+### 2. Verify JDK 17
 
 ```bash
 java -version
-# Should show: java version "1.8.0_xxx"
+# Should show: java version "17.x.x" or higher
 ```
 
 ### 3. Build and Run
@@ -121,9 +143,27 @@ Active Messages: 5
 ...
 ```
 
-## 📚 Workshop Steps
+## 📚 Documentation
 
-Follow the migration workshop in order:
+This repository includes comprehensive documentation:
+
+- **[MIGRATION.md](MIGRATION.md)** - Complete migration summary with all code changes
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Azure deployment guide using Azure Developer CLI (azd)
+- **[Migration Workshop](Migration/)** - Step-by-step workshop materials (optional learning path)
+
+### Quick Links
+
+| Document | Description |
+|----------|-------------|
+| [MIGRATION.md](MIGRATION.md) | Detailed list of all changes, transformations, and modernizations |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | Azure App Service deployment using azd |
+| [pom.xml](pom.xml) | Updated Maven configuration with Spring Boot 3.3.6 |
+| [azure.yaml](azure.yaml) | Azure Developer CLI configuration |
+| [infra/](infra/) | Bicep infrastructure-as-code templates |
+
+## 📚 Workshop Steps (Optional Learning Path)
+
+If you want to learn the migration process step-by-step:
 
 | Step | Title | Duration | Description |
 |------|-------|----------|-------------|
@@ -133,9 +173,47 @@ Follow the migration workshop in order:
 | [Step 3](Migration/step-03-create-migration-issue.md) | Create Migration Issue | 10 min | Request Copilot to implement the migration |
 | [Step 4](Migration/step-04-review-migration.md) | Review Migration Work | 30 min | Examine the migrated code and changes |
 | [Step 5](Migration/step-05-local-testing.md) | Local Testing | 30 min | Build and test the modernized application |
-| [Step 6](Migration/step-06-deployment.md) | Azure Deployment | 45 min | Deploy to Azure (App Service, Functions, or Containers) |
+| [Step 6](Migration/step-06-deployment.md) | Azure Deployment | 45 min | Deploy to Azure App Service |
 
 **Total Time**: 2-3 hours (core workshop) | 3-4 hours (with deployment)
+
+## ☁️ Deploy to Azure
+
+This application is ready to deploy to Azure App Service using Azure Developer CLI (azd):
+
+### Quick Deploy
+
+```bash
+# Install Azure Developer CLI (azd)
+# See: https://learn.microsoft.com/azure/developer/azure-developer-cli/install-azd
+
+# Login to Azure
+az login
+
+# Initialize and deploy
+azd init
+azd up
+```
+
+The `azd up` command will:
+1. Build your application (`mvn clean package`)
+2. Provision Azure resources (Resource Group, App Service Plan, App Service, Application Insights)
+3. Deploy the application to Azure App Service
+4. Display your application URL
+
+### What Gets Deployed
+
+- **App Service Plan**: Basic B1 tier (Linux, Java 17)
+- **App Service**: Running your Spring Boot 3.x application
+- **Application Insights**: Monitoring and logging (optional)
+- **Health Check**: Configured at `/api/messages`
+
+**For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).**
+
+### Estimated Monthly Cost
+
+- **Development**: ~$15-20/month (Basic B1 tier)
+- **Production**: ~$75-115/month (Standard S1 or Premium P1v2 tier)
 
 ## 🎓 Learning Objectives
 
